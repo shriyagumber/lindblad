@@ -1,11 +1,20 @@
-gfortran -c solve_me2.f95
-gfortran -c solve_tdse.f95
-gfortran -c readHnL.f95
-gfortran -c printfssh.f95
-gfortran -c inter.f95
-gfortran -c fssh.f95
-gfortran -c main_lindblad.f95
+SRC := src/solve_me2.f95 \
+       src/solve_tdse.f95 \
+       src/readHnL.f95 \
+       src/printfssh.f95 \
+       src/inter.f95 \
+       src/fssh.f95 \
+       src/main_lindblad.f95
 
-gfortran readHnL.o fssh.o inter.o solve_me2.o solve_tdse.o printfssh.o main_lindblad.o -o run_lindblad
+OBJ := $(patsubst src/%.f95,%.o,$(SRC))
 
-rm *.o *.mod
+all: run_lindblad
+
+run_lindblad: $(OBJ)
+	gfortran $(OBJ) -o $@
+
+%.o: src/%.f95
+	gfortran -c $<
+
+clean:
+	rm -f *.o *.mod run_lindblad
